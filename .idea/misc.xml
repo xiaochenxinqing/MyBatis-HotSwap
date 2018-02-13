@@ -4,9 +4,6 @@
     <option name="sourceMapPrefix" value="" />
     <option name="sourceMapEmbedSources" value="inlining" />
   </component>
-  <component name="ProjectDictionaryState">
-    <dictionary name="x" />
-  </component>
   <component name="ValidationConfiguration">
     <option name="VALIDATE_ON_BUILD" value="true" />
     <option name="VALIDATORS">
