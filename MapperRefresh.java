@@ -1,4 +1,4 @@
-package cn.cat.thread;
+package com.maintainsys.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,54 +23,34 @@ import com.google.common.collect.Sets;
 
 /**
  * 刷新MyBatis Mapper XML 线程
- * @author ThinkGem
+ * @author 原作者：ThinkGem
+ * 尹晓晨修改  用来和重写的SqlSessionFactoryBean类配合，以解决mybtis xml文件无法热部署的问题
  * @version 2016-5-29
  */
-public class MapperRefresh implements java.lang.Runnable {
+public class MapperRefresh implements Runnable {
 
-    public static Logger log = Logger.getLogger(MapperRefresh.class);
+    /*初始化配置*/
+    private static boolean enabled=true;         // 是否启用Mapper刷新线程功能
+    private static int delaySeconds=1;        // 延迟刷新秒数
+    private static int sleepSeconds=1;        // 休眠时间
+    private static String mappingPath="dao";      // xml文件所在的文件夹名，需要根据需要修改
 
-    private static String filename = "/mybatis-refresh.properties";
-    private static Properties prop = new Properties();
 
-    private static boolean enabled;         // 是否启用Mapper刷新线程功能
+    /*==========================================================================*/
+    private static Properties prop;
     private static boolean refresh;         // 刷新启用后，是否启动了刷新线程
-
     private Set<String> location;         // Mapper实际资源路径
-
     private Resource[] mapperLocations;     // Mapper资源路径
     private Configuration configuration;        // MyBatis配置对象
-
     private Long beforeTime = 0L;           // 上一次刷新时间
-    private static int delaySeconds;        // 延迟刷新秒数
-    private static int sleepSeconds;        // 休眠时间
-    private static String mappingPath;      // xml文件夹匹配字符串，需要根据需要修改
 
+    public static Logger log = Logger.getLogger(MapperRefresh.class);
     static {
-
-        try {
-            prop.load(MapperRefresh.class.getResourceAsStream(filename));
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Load mybatis-refresh “"+filename+"” file error.");
-        }
-
-        enabled = "true".equalsIgnoreCase(getPropString("enabled"));
-
-        delaySeconds = getPropInt("delaySeconds");
-        sleepSeconds = getPropInt("sleepSeconds");
-        mappingPath = getPropString("mappingPath");
-
-        delaySeconds = delaySeconds == 0 ? 50 : delaySeconds;
-
-        sleepSeconds = sleepSeconds == 0 ? 3 : sleepSeconds;
-
-        mappingPath = StringUtils.isBlank(mappingPath) ? "mappings" : mappingPath;
-
+        prop = new Properties();
         System.out.println("是否开启刷新线程：" + enabled);
-        System.out.println("延迟刷新秒数："+delaySeconds+"秒");
-        System.out.println("休眠时间："+sleepSeconds+"秒");
-        System.out.println("mapper文件路径 " + mappingPath);
+        System.out.println("延迟刷新秒数：" + delaySeconds + "秒");
+        System.out.println("休眠时间：" + sleepSeconds + "秒");
+        System.out.println("mapper文件路径：" + mappingPath);
     }
 
     public static boolean isRefresh() {
@@ -93,7 +73,7 @@ public class MapperRefresh implements java.lang.Runnable {
         if (enabled) {
             // 启动刷新线程
             final MapperRefresh runnable = this;
-            new Thread(new java.lang.Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
 
