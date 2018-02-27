@@ -29,7 +29,7 @@ Mybatis有注解、xml文件两种写sql语句的方式。在xml文件中可以�
  ）   
   
 其他的区别在于你的项目是SpringBoot+Mybatis还是SSM：
-<h4>SpringBoot+Mybatis：</h4>
+<h4>一、SpringBoot+Mybatis环境：</h4>
 1：修改你的MyBatisConfig.java文件（即spring配置mybatis的文件），将原来的SqlSessionFactoryBean替换为给出的SqlSessionFactoryBean<br>
 2：修改application.yml<br>
     
@@ -38,7 +38,7 @@ Mybatis有注解、xml文件两种写sql语句的方式。在xml文件中可以�
         mapperLocations: classpath*:com/hand/**/sqlMap/*Mapper.xml
         configLocation: classpath:mybatis-config.xml
     
-<h4>SSM环境：</h4>
+<h4>二、SSM环境：</h4>
 1： 用重写的SqlSessionFactoryBean，用来替换掉原来自带的即可）：<br>
  <!-- 配置mybitas SqlSessionFactoryBean-->
     <bean id="sqlSessionFactory" class="com.maintainsys.util.SqlSessionFactoryBean">
