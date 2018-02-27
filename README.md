@@ -39,8 +39,9 @@ Mybatis有注解、xml文件两种写sql语句的方式。在xml文件中可以�
         configLocation: classpath:mybatis-config.xml
     
 <h4>二、SSM环境：</h4>
-1： 用重写的SqlSessionFactoryBean，用来替换掉原来自带的即可）：<br>
- <!-- 配置mybitas SqlSessionFactoryBean-->
+1： 用重写的SqlSessionFactoryBean，用来替换掉原来自带的即可）：
+
+    <!-- 配置mybitas SqlSessionFactoryBean-->
     <bean id="sqlSessionFactory" class="com.maintainsys.util.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath*:/com/maintainsys/dao/*Mapper.xml"/>
